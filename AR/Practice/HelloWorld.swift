@@ -4,11 +4,11 @@ import SwiftUI
 
 struct HelloWorld: View {
     var body: some View {
-        ARViewContainer()
+        HelloWorldARView()
     }
 }
 
-struct ARViewContainer: UIViewRepresentable {
+struct HelloWorldARView: UIViewRepresentable {
     func makeUIView(context: Context) -> ARView {
         let arView = ARView(frame: .zero)
         arView.debugOptions = [.showStatistics, .showFeaturePoints]
@@ -56,9 +56,12 @@ struct ARViewContainer: UIViewRepresentable {
             imageBoxMaterial.baseColor = MaterialColorParameter.texture(texture)
             let imageBoxModel = ModelEntity(mesh: imageBoxMesh, materials: [imageBoxMaterial])
             imageBoxModel.position = SIMD3<Float>(0.1, -0.2, -0.8)
+            let degree: Float = 160 * 180 / .pi
+            imageBoxModel.orientation = simd_quatf(angle: degree, axis: [0, 3, 0])
+            imageBoxModel.scale = SIMD3<Float>(2.0, 2.0, 2.0)
             anchor.addChild(imageBoxModel)
         }
-        
+
         // 動画ボックス
         if let videoURL = Bundle.main.url(forResource: "video-sample", withExtension: "mp4") {
             let asset = AVURLAsset(url: videoURL)
